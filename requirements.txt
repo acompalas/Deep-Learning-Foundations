@@ -1,0 +1,10 @@
+streamlit
+numpy
+matplotlib
+time
+pandas
+scikit-learn 
+plotly
+torch
+seaborn
+Pillow

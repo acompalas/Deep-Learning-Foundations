@@ -1,0 +1,59 @@
+.carousel-container {
+    font-family: "Source Sans Pro", sans-serif;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    /* border-radius: 10px; */
+  }
+  
+  .slide {
+    display: none;
+    height: 100%;
+  }
+  
+  .slide.active {
+    display: block;
+  }
+  
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    color: white;
+    padding: 1rem;
+    width: 100%;
+  }
+  
+  .learn-more {
+    display: inline-block;
+    margin-top: 0.5rem;
+    background: #262730;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 20px;
+  }
+  
+  .nav-buttons {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .nav-buttons button {
+    background:  #262730;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+  

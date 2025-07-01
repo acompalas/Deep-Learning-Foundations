@@ -1,0 +1,79 @@
+.carousel-container {
+    font-family: "Source Sans Pro", sans-serif;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.slide {
+    display: none;
+    height: 100%;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    color: white;
+    z-index: 2;
+}
+
+.overlay::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    z-index: -1;
+}
+
+.learn-more {
+    display: inline-block;
+    margin-top: 0.5rem;
+    margin-left: 0.6rem;
+    margin-bottom: 0.25rem;
+    background: #262730;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 20px;
+}
+
+.nav-buttons {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.nav-buttons button {
+    background: #262730;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 42px;
+    height: 42px;
+    text-align: center;
+    line-height: 1;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
