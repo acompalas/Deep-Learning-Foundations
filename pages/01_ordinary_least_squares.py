@@ -70,8 +70,10 @@ st.subheader("Slope Intercept Model vs. Linear Regression")
 st.markdown("""
 Linear regression is closely related to the **slope-intercept model** from algebra, which is purely deterministic.
 
-However, in statistics, **linear regression is stochastic**, meaning that we assume the data contains some inherent randomness:
+However, in statistics, **linear regression is stochastic**, meaning that we assume the data contains some inherent randomness where we errors cancel each other out centered around some line and are normally distributed:
 """)
+st.latex(r"\mathbb{E}[\varepsilon] = 0 \quad\quad \varepsilon \sim \mathcal{N}(0, \sigma)")
+
 
 # -------------------------------
 # Images: slope-intercept vs. noisy fit
@@ -84,7 +86,6 @@ with col1:
 with col2:
     st.image(crop_and_resize(img2), caption="Stochastic Linear Regression Fit")
 
-st.latex(r"\mathbb{E}[\varepsilon] = 0 \quad\quad \varepsilon \sim \mathcal{N}(0, \sigma)")
 
 # -------------------------------
 # Model Type Selection
@@ -97,10 +98,11 @@ model_type = st.radio(
 )
 
 if model_type == "Simple Linear Regression":
-    st.latex(r"\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x")
     st.markdown("This is the general form of **simple linear regression** with a single predictor variable.")
+    st.latex(r"\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x")
 
 elif model_type == "Multiple Linear Regression":
+    st.markdown("We use **multiple linear regression** when we have multiple covariates")
     st.latex(r"\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \dots + \hat{\beta}_n x_n = \boldsymbol{\beta}^\top \mathbf{x}")
     st.latex(r"""
     \boldsymbol{\beta} =
@@ -121,8 +123,10 @@ elif model_type == "Multiple Linear Regression":
     x_n
     \end{bmatrix}
     """)
+    
 
 elif model_type == "Multivariate Linear Regression":
+    st.markdown("We use **multivariate linear regression** when we have multiple indpendent variables and covariates")
     st.latex(r"\mathbf{\hat{y}} = \mathbf{X} \boldsymbol{\beta}")
     st.markdown("For example, with 3 data points and 2 features (plus a bias term):")
     st.latex(r"""
@@ -147,6 +151,9 @@ elif model_type == "Multivariate Linear Regression":
     \hat{\beta}_2
     \end{bmatrix}
     """)
+    
+st.header("Interactive Examples")
+st.markdown("For our interactive examples, we will consider 1000 datapoints of linear data in the form of simple linear regression.")
 
 # -------------------------------
 # Generate Synthetic Data
@@ -204,7 +211,7 @@ st.markdown("This represents the distance between the model predictions and the 
 # -------------------------------
 st.subheader("Try optimizing manually.")
 if st.session_state.data_generated:
-    mode = st.radio("Visualization Mode", ["Manual Fit", "Optimize One Parameter", "RSS Surface + Contour"])
+    mode = st.radio("Visualization Mode", ["Manual Fit", "Optimize on Parabola", "RSS Surface + Contour"])
 
     x = data["x"]
     y = data["y"]
@@ -586,3 +593,54 @@ if st.button("Run R² Test"):
         st.warning("Please run OLS Fit before testing R².")
 
 
+st.markdown(r"""
+### $\chi^2$ Test for Goodness of Fit
+
+We assume the noise in the data has known standard deviation $\sigma = 2$ (used during data generation).
+
+The **Chi-squared statistic** is defined as:
+
+$$
+\chi^2 = \sum_{i=1}^n \left( \frac{y_i - \hat{y}_i}{\sigma} \right)^2 = \frac{RSS}{\sigma^2}
+$$
+
+We also define the **Reduced Chi-squared**:
+
+$$
+\chi^2_\nu = \frac{\chi^2}{\nu} = \frac{RSS}{\sigma^2 (n - m)}
+$$
+
+Where:
+- $RSS = \sum (y_i - \hat{y}_i)^2$ is the residual sum of squares
+- $\nu = n - m$ is the degrees of freedom
+- $n$ is the number of observations
+- $m$ is the number of fitted parameters (2 here: $\beta_0$ and $\beta_1$)
+
+#### Interpretation:
+- $\chi^2_\nu \approx 1$: Good fit
+- $\chi^2_\nu \gg 1$: Poor fit or underestimated $\sigma$
+- $\chi^2_\nu \ll 1$: Overfitting or overestimated $\sigma$
+""")
+
+
+if st.button("Run Chi-Squared Test"):
+    sigma_squared = 4
+    n = len(data["y"])
+    m = 2  # intercept and slope
+    chi2 = rss / sigma_squared
+    chi2_red = chi2 / (n - m)
+
+    st.markdown(f"""
+    ### $\chi^2$ Test Results  
+    - **RSS:** {rss:.2f}  
+    - **Assumed $\sigma^2$:** {sigma_squared:.2f}  
+    - **Chi-Squared:** {chi2:.2f}  
+    - **Reduced Chi-Squared:** {chi2_red:.2f}  
+    """)
+
+    if np.isclose(chi2_red, 1, atol=0.3):
+        st.success(f"Good fit: Reduced $\chi^2$ ≈ {chi2_red:.2f} suggests the model fits within the expected noise level.")
+    elif chi2_red < 1:
+        st.info(f"Possible overfitting: Reduced $\chi^2$ ≈ {chi2_red:.2f} is less than 1, which may suggest the model is fitting noise.")
+    else:
+        st.warning(f"Poor fit: Reduced $\chi^2$ ≈ {chi2_red:.2f} indicates underfitting or model misspecification.")
