@@ -48,9 +48,15 @@ st.title("Ordinary Least Squares")
 
 st.header("Overview")
 st.markdown("""
-Ordinary Least Squares (OLS) is a closed-form analytical approach to Linear Regression which models the relationship between a set of features and a continuous target variable.
-""")
+This page introduces **Ordinary Least Squares (OLS)** regression, a method used to model the relationship between a set of features and a continuous target variable. 
 
+OLS provides a **closed-form solution** to linear regression by minimizing the **sum of squared residuals**
+between the predicted and actual values.
+
+In this page, you’ll:
+- Understand the **mathematical derivation** of OLS
+- Explore an **interactive visualization** of the OLS fit on synthetic data.
+""")
 st.header("Linear Regression")
 st.markdown("We assume a linear relationship of the form:")
 st.latex(r"y = \beta_0 + \beta_1 x + \varepsilon")
@@ -240,16 +246,6 @@ if st.session_state.data_generated:
 
     # Feedback Message
     rss_diff = abs(rss - data["rss_true"])
-    if rss_diff < 100:
-        st.success(f"Great job! Your RSS is very close to the true noise level (Δ = {rss_diff:.2f})")
-    else:
-        st.info(f"Keep adjusting! Your RSS is still off by about {rss_diff:.2f} from the true noise")
-
-    # Reset Button
-    if st.button("Reset Sliders to Default"):
-        st.session_state.b0 = default_b0
-        st.session_state.b1 = default_b1
-        st.rerun()()
 
     beta_range = np.linspace(-20, 20, 300)
 
@@ -341,10 +337,21 @@ if st.session_state.data_generated:
     # Render the selected visualization
     if mode == "Manual Fit":
         st.pyplot(plot_manual())
-    elif mode == "Optimize One Parameter":
+    elif mode == "Optimize on Parabola":
         st.pyplot(plot_optimize_one())
     elif mode == "RSS Surface + Contour":
         st.pyplot(plot_surface_contour())
+        
+    if rss_diff < 100:
+        st.success(f"Great job! Your RSS is very close to the true noise level (Δ = {rss_diff:.2f})")
+    else:
+        st.info(f"Keep adjusting! Your RSS is still off by about {rss_diff:.2f} from the true noise")
+        
+    # Reset Button
+    if st.button("Reset Sliders to Default"):
+        st.session_state.b0 = default_b0
+        st.session_state.b1 = default_b1
+        st.rerun()()
 else:
     st.warning("Please generate data before fitting.")
         
