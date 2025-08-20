@@ -4,6 +4,6 @@ import base64
 import os
 
 # st.set_page_config(layout="wide")
-st.title("Anderson's Deep Learning Notes")
+st.title("Deep Learning Foundations")
 
 
